@@ -1,0 +1,40 @@
+{
+  "name": "claude-code-website-tester",
+  "version": "1.0.0",
+  "description": "Claude Code slash command for automated website testing and error detection",
+  "main": "src/index.js",
+  "bin": {
+    "claude-website-test": "./bin/claude-website-test.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/index.js https://example.com",
+    "install:command": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js"
+  },
+  "keywords": [
+    "claude-code",
+    "website-testing",
+    "browser-automation",
+    "error-detection",
+    "puppeteer",
+    "console-monitoring"
+  ],
+  "author": "AmberjackQQ",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer-core": "^23.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AmberjackQQ/claude-code-website-tester.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AmberjackQQ/claude-code-website-tester/issues"
+  },
+  "homepage": "https://github.com/AmberjackQQ/claude-code-website-tester#readme"
+}

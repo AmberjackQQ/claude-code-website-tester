@@ -1,0 +1,81 @@
+name: Test Website
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run every day at 9:00 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        url:
+          - https://example.com
+          # Add more URLs to test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run website test
+        run: npm start ${{ matrix.url }}
+        continue-on-error: true
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report-${{ github.sha }}
+          path: |
+            output/test-report.json
+            output/screenshot.png
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('output/test-report.json', 'utf8'));
+              const healthScore = report.summary.healthScore;
+              const totalErrors = report.summary.totalErrors;
+
+              let comment = `## 📊 Website Test Results\n\n`;
+              comment += `- **URL**: ${{ matrix.url }}\n`;
+              comment += `- **Health Score**: ${healthScore}/100\n`;
+              comment += `- **Errors**: ${totalErrors}\n\n`;
+
+              if (totalErrors > 0) {
+                comment += `### ⚠️ Issues Found\n\n`;
+                comment += `Please check the uploaded artifacts for details.\n`;
+              } else {
+                comment += `### ✅ No Errors Found\n\n`;
+              }
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not read report:', error.message);
+            }
