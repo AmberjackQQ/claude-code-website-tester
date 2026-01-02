@@ -94,6 +94,14 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 
 If you find this project useful, please consider giving it a star!
 
+## 📱 Follow Us
+
+欢迎关注我们的公众号，获取更多项目更新和技术分享：
+
+<div align="center">
+  <img src="./qrcode.png" alt="公众号二维码" width="200">
+</div>
+
 ---
 
 Made with ❤️ by [AmberjackQQ](https://github.com/AmberjackQQ)
